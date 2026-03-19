@@ -409,6 +409,7 @@ ggally_statistic <- function(
   text_fn,
   title,
   na.rm = NA,
+  class_number = 5,
   display_grid = FALSE,
   justify_labels = "right",
   justify_text = "left",
@@ -439,7 +440,8 @@ ggally_statistic <- function(
   colorData <- eval_data_col(data, mapping$colour)
 
   if (is.numeric(colorData)) {
-    breaks <- unique(quantile(colorData, probs = seq(0, 1, by = 0.2), na.rm = TRUE))
+    probs <- seq(0, 1, length.out = class_number + 1)
+    breaks <- unique(quantile(colorData, probs = probs, na.rm = TRUE))
     colorData <- cut(colorData, breaks = breaks, include.lowest = TRUE)
   }
 

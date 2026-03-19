@@ -107,6 +107,7 @@ v1_ggmatrix_theme <- function() {
 ggally_cor_v1_5 <- function(
   data,
   mapping,
+  class_number = 5,
   alignPercent = 0.6,
   method = "pearson",
   use = "complete.obs",
@@ -189,7 +190,8 @@ ggally_cor_v1_5 <- function(
   }
   colorData <- eval_data_col(data, mapping$colour)
   if (is.numeric(colorData)) {
-    breaks <- unique(quantile(colorData, probs = seq(0, 1, by = 0.2), na.rm = TRUE))
+    probs <- seq(0, 1, length.out = class_number + 1)
+    breaks <- unique(quantile(colorData, probs = probs, na.rm = TRUE))
     colorData <- cut(colorData, breaks = breaks, include.lowest = TRUE)
   }
   if (use %in% c("complete.obs", "pairwise.complete.obs", "na.or.complete")) {
