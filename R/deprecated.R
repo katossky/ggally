@@ -189,9 +189,7 @@ ggally_cor_v1_5 <- function(
   }
   colorData <- eval_data_col(data, mapping$colour)
   if (is.numeric(colorData)) {
-    cli::cli_abort(
-      "{.fn ggally_cor}: mapping color column must be categorical, not numeric"
-    )
+    colorData <- cut(colorData, breaks = quantile(colorData, probs = seq(0, 1, by = 0.2), na.rm = TRUE), include.lowest = TRUE)
   }
 
   if (use %in% c("complete.obs", "pairwise.complete.obs", "na.or.complete")) {

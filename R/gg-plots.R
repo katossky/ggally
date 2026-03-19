@@ -439,9 +439,7 @@ ggally_statistic <- function(
   colorData <- eval_data_col(data, mapping$colour)
 
   if (is.numeric(colorData)) {
-    cli::cli_abort(
-      "{.arg mapping} color column must be categorical, not numeric"
-    )
+    colorData <- cut(colorData, breaks = quantile(colorData, probs = seq(0, 1, by = 0.2), na.rm = TRUE), include.lowest = TRUE)
   }
 
   display_na_rm <- is.na(na.rm)
