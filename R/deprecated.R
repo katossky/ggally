@@ -189,9 +189,9 @@ ggally_cor_v1_5 <- function(
   }
   colorData <- eval_data_col(data, mapping$colour)
   if (is.numeric(colorData)) {
-    colorData <- cut(colorData, breaks = quantile(colorData, probs = seq(0, 1, by = 0.2), na.rm = TRUE), include.lowest = TRUE)
+    breaks <- unique(quantile(colorData, probs = seq(0, 1, by = 0.2), na.rm = TRUE))
+    colorData <- cut(colorData, breaks = breaks, include.lowest = TRUE)
   }
-
   if (use %in% c("complete.obs", "pairwise.complete.obs", "na.or.complete")) {
     if (!is.null(colorData) && (length(colorData) == length(xData))) {
       rows <- complete.cases(xData, yData, colorData)
