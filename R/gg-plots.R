@@ -410,6 +410,7 @@ ggally_statistic <- function(
   title,
   na.rm = NA,
   class_number = 5,
+  discretisation_method = "quantile",
   display_grid = FALSE,
   justify_labels = "right",
   justify_text = "left",
@@ -441,7 +442,11 @@ ggally_statistic <- function(
 
   if (is.numeric(colorData)) {
     probs <- seq(0, 1, length.out = class_number + 1)
-    breaks <- unique(quantile(colorData, probs = probs, na.rm = TRUE))
+    if (discretisation_method == "quantile") {
+      breaks <- unique(quantile(colorData, probs = probs, na.rm = TRUE))
+    } else if (discretisation_method == "equal") {
+      breaks <- seq(min(colorData, na.rm = TRUE), max(colorData, na.rm = TRUE), length.out = class_number + 1)
+    }
     colorData <- cut(colorData, breaks = breaks, include.lowest = TRUE)
   }
 
