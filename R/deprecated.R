@@ -107,6 +107,8 @@ v1_ggmatrix_theme <- function() {
 ggally_cor_v1_5 <- function(
   data,
   mapping,
+  class_number = 5,
+  discretisation_method = "quantile",
   alignPercent = 0.6,
   method = "pearson",
   use = "complete.obs",
@@ -189,11 +191,14 @@ ggally_cor_v1_5 <- function(
   }
   colorData <- eval_data_col(data, mapping$colour)
   if (is.numeric(colorData)) {
-    cli::cli_abort(
-      "{.fn ggally_cor}: mapping color column must be categorical, not numeric"
-    )
+    probs <- seq(0, 1, length.out = class_number + 1)
+    if (discretisation_method == "quantile") {
+      breaks <- unique(quantile(colorData, probs = probs, na.rm = TRUE))
+    } else if (discretisation_method == "equal") {
+      breaks <- seq(min(colorData, na.rm = TRUE), max(colorData, na.rm = TRUE), length.out = class_number + 1)
+    }
+    colorData <- cut(colorData, breaks = breaks, include.lowest = TRUE)
   }
-
   if (use %in% c("complete.obs", "pairwise.complete.obs", "na.or.complete")) {
     if (!is.null(colorData) && (length(colorData) == length(xData))) {
       rows <- complete.cases(xData, yData, colorData)
